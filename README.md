@@ -47,8 +47,10 @@ renren-security
 │  ├─statics 第三方库、插件等静态资源
 │  ├─index.html AdminLTE主题风格（默认主题）
 │  └─index1.html Layui主题风格
-
+├──renre-msg 短信模块
 ```
+
+短信平台可以实现短信通道管理，短信模版匹配，短信服务和批量短信发送，可通过上传excel或api接口实现短信录入。
 
 
 **如何交流、反馈、参与贡献？** 
