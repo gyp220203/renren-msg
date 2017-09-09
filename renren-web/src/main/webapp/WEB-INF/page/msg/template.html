@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>模版管理</title>
+#parse("sys/header.html")
+</head>
+<body>
+<div id="rrapp" v-cloak>
+    <!-- 默认显示的面板 -->
+	<div v-show="showList">
+		<div class="grid-btn">
+			#if($shiro.hasPermission("msg:template:save"))
+			<a class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+			#end
+			#if($shiro.hasPermission("msg:template:update"))
+			<!-- @click标签对应的方法在引入的js中定义，其包含在Vue中 -->
+			<a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+			#end
+			#if($shiro.hasPermission("msg:template:delete"))
+			<a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+			#end
+		</div>
+		<!-- 下面的元素就是插入表格的地方 -->
+	    <table id="jqGrid"></table>
+	    <!-- 分页插件 -->
+	    <div id="jqGridPager"></div>
+    </div>
+    
+    <div v-show="!showList" class="panel panel-default">
+		<div class="panel-heading">{{title}}</div>
+		<form class="form-horizontal">
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">模版名称</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="template.templateName" placeholder="模版名称"/>
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">模版内容</div>
+			   	<div class="col-sm-10">
+                  	<!-- <input type="text" class="form-control" v-model="template.templateBody" placeholder="模版内容"/> -->
+	                <textarea rows="4" cols="20" class="form-control" v-model="template.templateBody"  >
+					</textarea>
+                </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">模版签名</div>
+			   	<div class="col-sm-10">
+	                <input type="text" class="form-control" v-model="template.signature" placeholder="签名" >
+                </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">绑定通道</div>
+			   	<div class="col-sm-10">
+				   	<label v-for="channel in channelList" class="radio-inline">
+				   		<span v-if="channel.status==1">
+					  	<input type="radio" name="channel" :value="channel.channelId" v-model="template.channelId" 
+					  	@click="updateSignature(channel.signature)">{{channel.channelName}}
+					  	</span>
+					  	<span v-if="channel.status==0" style="color: red">
+					  	<input type="radio" name="channel" :value="channel.channelId" v-model="template.channelId"
+					  	@click="updateSignature(channel.signature)">{{channel.channelName}}-已禁用
+					  	</span>
+					</label>
+					 <code style="margin-top:4px;display: block;">* 若通道删除，则绑定通道被设置为空</code>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label"></div> 
+				<input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
+				&nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+			</div>
+			
+			
+		</form>
+	</div>
+</div>
+   
+<script src="${rc.contextPath}/js/msg/template.js?_${date.systemTime}"></script>    
+</body>
+</html>

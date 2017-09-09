@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
+    <wb-module deploy-name="renren-web">
+        <wb-resource deploy-path="/" source-path="/target/m2e-jee/web-resources"/>
+        <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
+        <dependent-module archiveName="renren-common-2.1.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/renren-common/renren-common">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="renren-shiro-2.1.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/renren-shiro/renren-shiro">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="renren-gen-2.1.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/renren-gen/renren-gen">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="renren-schedule-2.1.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/renren-schedule/renren-schedule">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="renren-api-2.1.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/renren-api/renren-api">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="renren-msg-2.1.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/renren-msg/renren-msg">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <property name="java-output-path" value="/renren-web/target/classes"/>
+        <property name="me-merge-deployed-modules" value="-renren-common-2.1.0.jar;-renren-schedule-2.1.0.jar;-renren-gen-2.1.0.jar;-renren-api-2.1.0.jar;-renren-msg-2.1.0.jar;-renren-shiro-2.1.0.jar;"/>
+        <property name="context-root" value="/renren-web"/>
+    </wb-module>
+</project-modules>

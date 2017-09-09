@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.MsgBatchInfoDao">
+	<sql id='TABLE_NAME'>msg_batchInfo</sql>
+
+	<select id="queryObject" resultType="io.renren.entity.MsgBatchInfoEntity">
+		select * from
+		<include refid="TABLE_NAME" />
+		where batchInfo_id = #{value}
+	</select>
+
+	<select id="queryList" resultType="io.renren.entity.MsgBatchInfoEntity">
+		select * from
+		<include refid="TABLE_NAME" />
+		<where>
+			<if test="userId != null">
+				and `user_id` = #{userId}
+			</if>
+		</where>
+		<!-- 页面自定义排序 -->
+		<choose>
+			<when test="sidx != null and sidx.trim() != ''">
+				order by ${sidx} ${order}
+			</when>
+			<otherwise>
+				order by createTime desc
+			</otherwise>
+		</choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+	<select id="queryTotal" resultType="int">
+		select count(*) from
+		<include refid="TABLE_NAME" />
+	</select>
+
+
+	<insert id="save" parameterType="io.renren.entity.MsgBatchInfoEntity">
+		insert into
+		<include refid="TABLE_NAME" />
+		(
+		`batchInfo_Id`,
+		`user_Id`,
+		`username`,
+		`createTime`,
+		`totalNumber`,
+		`checkNumber`,
+		`sendNumber`
+		)
+		values
+		(
+		#{batchInfoId},
+		#{userId},
+		#{username},
+		#{createTime},
+		#{totalNumber},
+		#{checkNumber},
+		#{sendNumber}
+		)
+	</insert>
+	<update id="update" parameterType="io.renren.entity.MsgBatchInfoEntity">
+		update
+		<include refid="TABLE_NAME" />
+		<set>
+			<if test="userId != null">`user_Id` = #{userId}, </if>
+			<if test="username != null">`username` = #{username}, </if>
+			<if test="createTime != null">`createTime` = #{createTime}, </if>
+			<if test="totalNumber != null">`totalNumber` = #{totalNumber}, </if>
+			<if test="checkNumber != null">`checkNumber` = #{checkNumber}, </if>
+			<if test="sendNumber != null">`sendNumber` = #{sendNumber}, </if>
+		</set>
+		where batchInfo_Id = #{batchInfoId}
+	</update>
+	<update id="updateSendNumber" >
+		SET SQL_SAFE_UPDATES = 0;
+		update
+			msg_batchInfo t
+		<set>
+			`sendNumber` =(select count(*) from msg_msg m 
+				where m.status=#{value} and m.batchInfo_Id = t.batchInfo_Id ), 
+		</set>		
+		where sendNumber != checkNumber;
+		SET SQL_SAFE_UPDATES = 1;
+	</update>
+
+	<delete id="deleteBatch">
+		delete from
+		<include refid="TABLE_NAME" />
+		where batchInfo_Id in
+		<foreach item="batchInfoId" collection="array" open="(" separator="," close=")" >
+			#{batchInfoId}
+		</foreach>
+	</delete>
+</mapper>

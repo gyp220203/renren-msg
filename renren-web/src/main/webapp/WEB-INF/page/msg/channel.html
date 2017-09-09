@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>通道管理</title>
+#parse("sys/header.html")
+</head>
+<body>
+<div id="rrapp" v-cloak>
+    <!-- 默认显示的面板 -->
+	<div v-show="showList">
+		<div class="grid-btn">
+			#if($shiro.hasPermission("msg:channel:save"))
+			<a class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+			#end
+			#if($shiro.hasPermission("msg:channel:update"))
+			<!-- @click标签对应的方法在引入的js中定义，其包含在Vue中 -->
+			<a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+			#end
+			#if($shiro.hasPermission("msg:channel:delete"))
+			<a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+			#end
+			#if($shiro.hasPermission("msg:channel:updateBalance"))
+			<a class="btn btn-primary" style="float:right;" @click="updateBalance"><i class="fa fa-credit-card"></i>&nbsp;余额</a>
+			#end
+		</div>
+		<!-- 下面的元素就是插入表格的地方 -->
+	    <table id="jqGrid"></table>
+	    <!-- 分页插件 -->
+	    <div id="jqGridPager"></div>
+    </div>
+    
+    <div v-show="!showList" class="panel panel-default">
+		<div class="panel-heading">{{title}}</div>
+		<form class="form-horizontal">
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">通道名称</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="channel.channelName" placeholder="通道名称"/>
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">状态</div>
+			   	<label class="radio-inline">
+                  <input type="radio" name="status" value="0" v-model="channel.status"/> 禁用
+                </label>
+                <label class="radio-inline">
+                  <input type="radio" name="status" value="1" v-model="channel.status" /> 正常
+                </label>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">登录名</div>
+			   	<div class="col-sm-10">
+                  <input type="text" class="form-control" v-model="channel.username" placeholder="登录名"/>
+                </div>
+			</div>
+			<div class="form-group">
+                <div class="col-sm-2 control-label">登录密码</div>
+                <div class="col-sm-10">
+                  <input type="text" class="form-control" v-model="channel.password" placeholder="登录密码"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">短信发送url</div>
+                <div class="col-sm-10">
+                  <input type="text" class="form-control" v-model="channel.url4send" placeholder="短信发送url"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">短信查询url</div>
+                <div class="col-sm-10">
+                  <input type="text" class="form-control" v-model="channel.url4query" placeholder="短信查询url"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">短信签名</div>
+                <div class="col-sm-10">
+                  <input type="text" class="form-control" v-model="channel.signature" placeholder="签名"/>
+                </div>
+            </div>
+            <div class="form-group">
+			   	<div class="col-sm-2 control-label">授权用户</div>
+			   	<div class="col-sm-10">
+				   	<label v-for="user in userList" class="checkbox-inline">
+				   	<!-- userList是所有用户，channel.userIdList是通道授权用户 -->
+					  <input type="checkbox" :value="user.userId" v-model="channel.userIdList">{{user.username}}
+					</label>
+				</div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label">绑定服务</div>
+			   	<div class="col-sm-10">
+				   	<label v-for="implement in implementList" class="radio-inline">
+					  <input type="radio" name="implement"  :value="implement.implementId" v-model="channel.implementId">{{implement.implementName}}
+					</label>
+				</div>
+			</div> 
+			<div class="form-group">
+				<div class="col-sm-2 control-label"></div> 
+				<input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
+				&nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+			</div>
+			
+			
+		</form>
+	</div>
+</div>
+   
+<script src="${rc.contextPath}/js/msg/channel.js?_${date.systemTime}"></script>    
+</body>
+</html>

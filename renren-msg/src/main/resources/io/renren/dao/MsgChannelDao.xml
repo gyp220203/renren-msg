@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.MsgChannelDao">
+    <sql id='TABLE_NAME'>msg_channel</sql>
+    
+    
+	<select id="queryObject" resultType="io.renren.entity.MsgChannelEntity">
+		select * from <include refid="TABLE_NAME" /> where channel_id = #{value}
+	</select>
+
+	<select id="queryList" resultType="io.renren.entity.MsgChannelEntity">
+		select * from <include refid="TABLE_NAME"/> 
+		<where>
+		<!-- 用户限制 -->
+			<if test="userId != null">
+				and channel_id in(select channel_id from msg_channel_user where user_id=#{userId})
+			</if>
+			<if test="status != null">
+				and status =#{status}
+			</if>
+			<if test="implementId != null">
+				and implement_id =#{implementId}
+			</if>
+		</where>
+		<choose>
+			<when test="sidx != null and sidx.trim() != ''">
+				order by ${sidx} ${order}
+			</when>
+			<otherwise>
+				order by channel_id asc
+			</otherwise>
+		</choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from <include refid="TABLE_NAME" />
+		<where>
+			<if test="userId != null">
+				and 'channel_id' in(select channel_id from msg_channel_user where user_id=#{userId})
+			</if>
+		</where>
+	</select>
+	<select id="queryChannelUserList" resultType ="long">
+		select user_id from msg_channel_user where channel_id=#{value}
+	</select>
+	 
+	<insert id="save" parameterType="io.renren.entity.MsgChannelEntity" useGeneratedKeys="true" keyProperty="channelId">
+		insert into <include refid="TABLE_NAME" />
+		(
+			`channel_Id`, 
+			`channel_Name`, 
+			`status`, 
+			`username`, 
+			`password`, 
+			`url4send`,
+			`url4query`,
+			`balance`,
+			`implement_Id`,
+			`signature`
+		)
+		values
+		(
+			#{channelId}, 
+			#{channelName}, 
+			#{status}, 
+			#{username},
+			#{password}, 
+			#{url4send},
+			#{url4query},
+			#{balance},
+			#{implementId},
+			#{signature}
+		)
+	</insert>
+	<insert id="saveChannelUser" >
+		insert into msg_channel_user
+		(`channel_id`,`user_id`)
+		values
+		(
+		#{0},
+		#{1}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="io.renren.entity.MsgChannelEntity">
+		update <include refid="TABLE_NAME" /> 
+		<set>
+			<if test="channelName != null">`channel_Name` = #{channelName}, </if>
+			<if test="status != null">`status` = #{status}, </if>
+			<if test="username != null">`username` = #{username}, </if>
+			<if test="password != null">`password` = #{password}, </if>
+			<if test="url4send != null">`url4send` = #{url4send}, </if>
+			<if test="url4query != null">`url4query` = #{url4query},</if>
+			<if test="balance != null">`balance` = #{balance}, </if>
+			<if test="implementId != null">`implement_Id` = #{implementId}, </if>
+			<if test="signature != null">`signature` = #{signature}, </if>
+		</set>
+		where channel_Id = #{channelId}
+	</update>
+	<update id="updateBalance" >
+	   update <include refid="TABLE_NAME" /> set balance = #{1} where channel_Id = #{0}
+	</update>
+	<delete id="delete">
+		delete from <include refid="TABLE_NAME" /> where channel_Id = #{value}
+	</delete>
+	<delete id="deleteBatch">
+		delete from <include refid="TABLE_NAME" /> where channel_Id in 
+		<foreach item="channelId" collection="array" open="(" separator="," close=")">
+			#{channelId}
+		</foreach>
+	</delete>
+	<delete id="deleteChannelUser" >
+		delete from msg_channel_user where channel_id =#{value}
+	</delete>
+
+</mapper>

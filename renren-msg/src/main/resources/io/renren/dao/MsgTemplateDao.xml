@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.MsgTemplateDao">
+	<sql id='TABLE_NAME'>msg_template</sql>
+
+	<select id="queryObject" resultType="io.renren.entity.MsgTemplateEntity">
+		select * from <include refid="TABLE_NAME" /> where template_id = #{value}
+	</select>
+	
+	<select id="queryList" resultType="io.renren.entity.MsgTemplateEntity">
+		select * from <include refid="TABLE_NAME" /> 
+		<where>
+			<if test="userId != null">
+				and channel_id in(select channel_id from msg_channel_user where user_id=#{userId})
+			</if>
+		</where>
+		<!-- 页面自定义排序 -->
+		<choose>
+			<when test="sidx != null and sidx.trim() != ''">
+				order by ${sidx} ${order}
+			</when>
+			<otherwise>
+				order by template_id desc
+			</otherwise>
+		</choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+	<select id="queryTotal" resultType="int">
+		select count(*) from msg_template
+		<where>
+			<if test="userId != null">
+				and 'channel_id' in(select channel_id from msg_channel_user where user_id=#{userId})
+			</if>
+		</where>
+	</select>
+	
+	<insert id="save" parameterType="io.renren.entity.MsgTemplateEntity" useGeneratedKeys="true" keyProperty="templateId">
+		insert into msg_template
+		(
+			`templateName`, 
+			`templateBody`, 
+			`parameterNo`,
+			`channel_id`,
+			`signature`
+		)
+		values
+		(
+			#{templateName}, 
+			#{templateBody}, 
+			#{parameterNo},
+			#{channelId},
+			#{signature}
+		)
+	</insert>
+	<update id="update" parameterType="io.renren.entity.MsgTemplateEntity">
+		update msg_template 
+		<set> 
+			<if test="templateName != null">`templateName` = #{templateName}, </if>
+			<if test="templateBody != null">`templateBody` = #{templateBody}, </if>
+			<if test="parameterNo != null">`parameterNo` = #{parameterNo}, </if>
+			<if test="channelId != null">`channel_id` = #{channelId}, </if>
+			<if test="signature != null">`signature` = #{signature}, </if>
+		</set>
+		where template_id = #{templateId} 
+	</update>
+	
+	<delete id="deleteBatch">
+		delete from msg_template where template_Id in 
+		<foreach item="templateId" collection="array" open="(" separator="," close=")">
+			#{templateId}
+		</foreach>
+	</delete>
+
+</mapper>

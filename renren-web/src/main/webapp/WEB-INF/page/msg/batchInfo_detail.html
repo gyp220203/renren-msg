@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>批量短信详情</title> 
+#parse("sys/header.html")
+</head>
+<body>
+	<div id="rrapp" v-cloak>
+		<div class="grid-btn">
+			<a class="btn btn-primary" @click="back"><i class="fa fa-reply"></i>&nbsp;返回</a>
+		</div>
+		<!-- 下面的元素就是插入表格的地方 -->
+		<table id="jqGrid"></table>
+		<!-- 分页插件 -->
+		<div id="jqGridPager"></div>
+	</div>
+
+	<script src="${rc.contextPath}/js/msg/batchInfo_detail.js?_${date.systemTime}"></script>
+</body>
+</html>

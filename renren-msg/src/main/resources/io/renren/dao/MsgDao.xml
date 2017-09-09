@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.MsgDao">
+	<sql id='TABLE_NAME'>msg_msg</sql>
+
+	<select id="queryObject" resultType="io.renren.entity.MsgEntity">
+		select * from
+		<include refid="TABLE_NAME" />
+		where msg_id = #{value}
+	</select>
+
+	<select id="queryList" resultType="io.renren.entity.MsgEntity">
+		select * from
+		<include refid="TABLE_NAME" />
+		<!-- 页面自定义排序 -->
+		<where>
+			<!-- 用户限制 -->
+			<if test="userId != null">
+				and user_id =#{userId}
+			</if>
+			<if test="style != null">
+				and style =#{style}
+			</if>
+			<if test="status != null">
+				and status =#{status}
+			</if>
+			<if test="channelId != null">
+				and channel_id =#{channelId}
+			</if>
+			<if test="batchInfoId != null">
+				and batchInfo_id =#{batchInfoId}
+			</if>
+		</where>
+
+		<choose>
+			<when test="sidx != null and sidx.trim() != ''">
+				order by ${sidx} ${order}
+			</when>
+			<otherwise>
+				order by status desc
+			</otherwise>
+		</choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+	<select id="queryTotal" resultType="int">
+		select count(*) from
+		<include refid="TABLE_NAME" />
+		<where>
+			<if test="batchInfoId != null">
+				and batchInfo_id =#{batchInfoId}
+			</if>
+		</where>
+
+	</select>
+
+	<select id="queryByStatus" resultType="int">
+		select count(*) from
+		<include refid="TABLE_NAME" />
+		<where>
+			<if test="status != null">
+				and status =#{status}
+			</if>
+		</where>
+	</select>
+
+
+	<insert id="save" parameterType="io.renren.entity.MsgEntity">
+		insert into
+		<include refid="TABLE_NAME" />
+		(
+		`msg_Id`,
+		`status`,
+		`statusMsg`,
+		`telNumber`,
+		`template_Id`,
+		`templateName`,
+		`channel_Id`,
+		`channelName`,
+		`content`,
+		`cost`,
+		`responseCode`,
+		`responseMsg`,
+		`user_id`,
+		`userName`,
+		`style`,
+		`createTime`,
+		`sendTime`,
+		`batchInfo_id`
+		)
+		values
+		(
+		#{msgId},
+		#{status},
+		#{statusMsg},
+		#{telNumber},
+		#{templateId},
+		#{templateName},
+		#{channelId},
+		#{channelName},
+		#{content},
+		#{cost},
+		#{responseCode},
+		#{responseMsg},
+		#{userId},
+		#{userName},
+		#{style},
+		#{createTime},
+		#{sendTime},
+		#{batchInfoId}
+		)
+	</insert>
+	<update id="update" parameterType="io.renren.entity.MsgEntity">
+		update
+		<include refid="TABLE_NAME" />
+		<set>
+			<if test="status != null">`status` = #{status}, </if>
+			<if test="statusMsg != null">`statusMsg` = #{statusMsg}, </if>
+			<if test="content != null">`content` = #{content}, </if>
+			<if test="cost != null">`cost` = #{cost}, </if>
+			<if test="responseCode != null">`responseCode` = #{responseCode}, </if>
+			<if test="responseMsg != null">`responseMsg` = #{responseMsg}, </if>
+			<if test="sendTime != null">`sendTime` = #{sendTime}, </if>
+		</set>
+		where msg_id = #{msgId}
+	</update>
+
+	<delete id="deleteBatch">
+		delete from
+		<include refid="TABLE_NAME" />
+		where msg_Id in
+		<foreach item="msgId" collection="array" open="(" separator=","
+			close=")">
+			#{msgId}
+		</foreach>
+	</delete>
+</mapper>

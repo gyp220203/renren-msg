@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>批量短信</title>
+#parse("sys/header.html")
+<script src="${rc.contextPath}/statics/libs/ajaxupload.js"></script>
+</head>
+<body>
+<div id="rrapp" v-cloak>
+    <!-- 默认显示的面板 -->
+	<div class="grid-btn">
+		#if($shiro.hasPermission("msg:batchInfo:info"))
+		<a class="btn btn-primary" @click="info"><i class="fa fa-info-circle"></i>&nbsp;查看</a>
+		#end
+		#if($shiro.hasPermission("msg:batchInfo:delete"))
+		<a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+		#end
+		#if($shiro.hasPermission("msg:batchInfo:upload"))
+		<a class="btn btn-primary" id="upload"><i class="fa fa-upload"></i>&nbsp;上传文件</a>
+		#end
+		#if($shiro.hasPermission("msg:batchInfo:download"))
+		<a class="btn btn-primary" href="../msg/batchInfo/download"><i class="fa fa-download"></i>&nbsp;模版下载</a>
+		#end
+	</div>
+	<!-- 下面的元素就是插入表格的地方 -->
+    <table id="jqGrid"></table>
+    <!-- 分页插件 -->
+    <div id="jqGridPager"></div>
+</div>
+   
+<script src="${rc.contextPath}/js/msg/batchInfo.js?_${date.systemTime}"></script>    
+</body>
+</html>

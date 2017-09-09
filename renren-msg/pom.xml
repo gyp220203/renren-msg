@@ -1,0 +1,47 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<parent>
+		<groupId>io.renren</groupId>
+		<artifactId>renren-security</artifactId>
+		<version>${renren-version}</version>
+	</parent>
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>renren-msg</artifactId>
+	<packaging>jar</packaging>
+	<description>短信模块</description>
+
+	<dependencies>
+		<dependency>
+			<groupId>io.renren</groupId>
+			<artifactId>renren-common</artifactId>
+			<version>${renren-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.renren</groupId>
+			<artifactId>renren-api</artifactId>
+			<version>${renren-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>io.renren</groupId>
+			<artifactId>renren-shiro</artifactId>
+			<version>${renren-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.dom4j</groupId>
+			<artifactId>dom4j</artifactId>
+			<version>2.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>apache-httpclient</groupId>
+			<artifactId>commons-httpclient</artifactId>
+			<version>3.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+			<version>3.16</version>
+		</dependency>
+		
+	</dependencies>
+</project>

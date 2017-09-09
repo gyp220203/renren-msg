@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.dao.ImplementDao">
+	<sql id='TABLE_NAME'>msg_implement</sql>
+
+	<select id="queryObject" resultType="io.renren.entity.ImplementEntity">
+		select * from <include refid="TABLE_NAME" /> where implement_id = #{value}
+	</select>
+	
+	<select id="queryList" resultType="io.renren.entity.ImplementEntity">
+		select * from <include refid="TABLE_NAME" /> 
+		<!-- 页面自定义排序 -->
+		<choose>
+			<when test="sidx != null and sidx.trim() != ''">
+				order by ${sidx} ${order}
+			</when>
+			<otherwise>
+				order by implement_id asc
+			</otherwise>
+		</choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+	<select id="queryTotal" resultType="int">
+		select count(*) from <include refid="TABLE_NAME" />
+	</select>
+	
+	
+	<insert id="save" parameterType="io.renren.entity.ImplementEntity" useGeneratedKeys="true" keyProperty="implementId">
+		insert into <include refid="TABLE_NAME" />
+		(
+			`implementName`, 
+			`beanName`, 
+			`describe`
+		)
+		values
+		(
+			#{implementName}, 
+			#{beanName}, 
+			#{describe}
+		)
+	</insert>
+	<update id="update" parameterType="io.renren.entity.ImplementEntity">
+		update <include refid="TABLE_NAME" />
+		<set> 
+			<if test="implementName != null">`implementName` = #{implementName}, </if>
+			<if test="beanName != null">`beanName` = #{beanName}, </if>
+			<if test="describe != null">`describe` = #{describe}, </if>
+		</set>
+		where implement_id = #{implementId} 
+	</update>
+	
+	<delete id="deleteBatch">
+		delete from <include refid="TABLE_NAME" /> 
+		where implement_id in 
+		<foreach item="implementId" collection="array" open="(" separator="," close=")">
+			#{implementId}
+		</foreach>
+	</delete>
+</mapper>
