@@ -1,3 +1,5 @@
+CREATE DATABASE  IF NOT EXISTS `renren-security`;
+USE `renren-security`;
 -- 菜单
 CREATE TABLE `sys_menu` (
   `menu_id` bigint NOT NULL AUTO_INCREMENT,
