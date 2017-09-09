@@ -110,8 +110,3 @@ renren-security
 - 非Maven方式启动，则默认访问路径为：http://localhost:8080/renren-security
 - 账号密码：admin/admin
 
-
-**项目打赏** 
-
-如果您觉得作者的权限系统能帮助到您，您可以打赏作者一瓶汽水
-![输入图片说明](http://cdn.renren.io/img/10e0f63b327d4e7ab9113e7b9568381a "在这里输入图片标题")
