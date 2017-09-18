@@ -12,7 +12,7 @@ import io.renren.service.MsgBatchInfoService;
 import io.renren.util.MsgConstant;
 
 /**
- * 
+ *
  * @author gaoyupeng
  * @date 2017年6月28日
  */
@@ -45,7 +45,7 @@ public class MsgBatchInfoServiceImpl implements MsgBatchInfoService {
 	}
 	@Override
 	public int queryTotal(Map<String, Object> map) {
-		return batchInfoDao.queryTotal();
+		return batchInfoDao.queryTotal(map);
 	}
 	@Override
 	public void deleteBatch(String[] batchInfo_idList) {
